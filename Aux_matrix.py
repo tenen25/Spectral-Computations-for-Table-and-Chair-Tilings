@@ -5,12 +5,11 @@ from fractions import Fraction
 from numpy import linalg as LA
 
 # Function returns the current potential value
-def sub_diag(index, val_temp):
+def sub_diag(index, val):
     """Return the diagonal value at the given index (0–3), or 0 if out of range."""
-    if not 0 <= index < len(val_temp):
-        raise IndexError(f"index {index} out of range for val_temp of length {len(val_temp)}")
-    return val_temp[index]
-
+    if not 0 <= index < len(val):
+        raise IndexError(f"index {index} out of range for val of length {len(val)}")
+    return val[index]
 
 
 def nested_phase_points(res):
@@ -48,11 +47,11 @@ def nested_phase_points(res):
 
     return phases
     
-def op_mat_no_phase(patch, val_temp):
+def op_mat_no_phase(patch, val):
     """
     Build the real-space part of the Schroedinger operator matrix for a
     height x wid grid. Sets nearest-neighbour hopping (=1) and diagonal
-    values from val_temp.
+    values from val.
     Open boundary conditions — edges do not wrap.
     """
     height = len(patch)
@@ -67,12 +66,12 @@ def op_mat_no_phase(patch, val_temp):
             if i > 0:       mat[idx, idx - wid] = 1       # hop up
             if j < wid - 1: mat[idx, idx + 1]  = 1        # hop right
             if j > 0:       mat[idx, idx - 1]  = 1        # hop left
-            mat[idx, idx] = sub_diag(patch[i][j], val_temp)
+            mat[idx, idx] = sub_diag(patch[i][j], val)
 
     return mat
 
 
-def sample_band_edges(res, patch, val_temp):
+def sample_band_edges(res, patch, val):
     """
     Compute sampled band edges (min/max over phases) for all eigenvalues.
 
@@ -82,7 +81,7 @@ def sample_band_edges(res, patch, val_temp):
         Resolution parameter for the phase sampling.
     patch : list or np.ndarray
         2D substitution patch.
-    val_temp : dict or array-like
+    val : dict or array-like
         Potential values for symbols in the patch.
     """
 
@@ -94,7 +93,7 @@ def sample_band_edges(res, patch, val_temp):
     n_pts = len(phases)
 
     # Base matrix without phase-dependent wrap-around terms
-    mat1 = op_mat_no_phase(patch, val_temp)
+    mat1 = op_mat_no_phase(patch, val)
 
     # Precompute exponentials
     exp_pos = np.exp(1j * phases)
@@ -137,8 +136,3 @@ def sample_band_edges(res, patch, val_temp):
                 band_min = np.minimum(band_min, vect)
 
     return np.vstack((band_max, band_min))
-
-       
-
-
-
