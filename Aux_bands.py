@@ -18,36 +18,35 @@ def get_ordinal_suffix(num: int) -> str:
     if last_digit == 3: return "rd"
     return "th"
 
-def _band_filename(itera, val_temp):
+def _band_filename(itera, val):
     """Construct the canonical filename for a saved band computation."""
-    rounded = [round(v, 4) for v in val_temp]
-    return f"Finished computations/{itera}{get_ordinal_suffix(itera)}, comput for values {rounded}.npy"
+    rounded = [round(v, 4) for v in val]
+    return f"Finished computations/{{itera}}{get_ordinal_suffix(itera)}, comput for values {{rounded}}.npy"
 
-def save_bands(itera, res, patch, val_temp):
+def save_bands(itera, res, patch, val):
     """
     Compute and save band data for the given parameters.
     Saves a file .npy binary file with the full array
     """
-    save_arr = sample_band_edges(res, patch, val_temp)
-    base_path = _band_filename(itera, val_temp)  # includes .npy extension
+    save_arr = sample_band_edges(res, patch, val)
+    base_path = _band_filename(itera, val)  # includes .npy extension
 
     # Save binary
     np.save(base_path, save_arr)
 
-def read_bands(itera, val_temp):
+def read_bands(itera, val):
     """Load and return saved band data for the given parameters."""
-    path = _band_filename(itera, val_temp)
+    path = _band_filename(itera, val)
     if not os.path.exists(path):
-        raise FileNotFoundError(f"Band file not found: {path}")
+        raise FileNotFoundError(f"Band file not found: {{path}}")
     return np.load(path)
-
 
 
 ##################### plotting function #####################
 def print_several_bands(
         init_itera,
         fin_itera,
-        val_temp,
+        val,
         init_size,
         vert_dist=0.5,
         plot_tiny=False,
@@ -68,7 +67,7 @@ def print_several_bands(
     fin_itera : int
         Last iteration to plot.
 
-    val_temp : list or dict
+    val : list or dict
         Potential values used to label the data files.
 
     init_size : int
@@ -122,7 +121,7 @@ def print_several_bands(
 
     ax.set_xlabel('Spectrum')
     ax.set_ylabel('Iteration number n')
-    #ax.set_title(f"Periodic approximation spectra, iterations {init_itera}-{fin_itera}")
+    #ax.set_title(f"Periodic approximation spectra, iterations {{init_itera}}-{{fin_itera}}")
 
     horizontal_segments = []
     vertical_segments = []
@@ -131,7 +130,7 @@ def print_several_bands(
         y = it
         size = init_size * (4 ** it)
 
-        mat = read_bands(it, val_temp)
+        mat = read_bands(it, val)
 
         for i in range(size):
             left = min(mat[1][i], mat[0][i])
@@ -177,7 +176,6 @@ def print_several_bands(
 
     if save_path is not None:
         fig.savefig(save_path, bbox_inches='tight')
-        print(f"Figure saved to {save_path}")
+        print(f"Figure saved to {{save_path}}")
 
     plt.show()
-    
