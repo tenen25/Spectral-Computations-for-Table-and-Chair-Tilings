@@ -125,7 +125,7 @@ When `main.py` is executed, it runs the following steps:
 ### Core Call Chain
 
 ```
-main → save_bands → sample_band_edges(res, patch, val_temp) → op_mat_no_phase → eigvalsh
+main → save_bands → sample_band_edges → op_mat_no_phase → eigvalsh
 main → print_several_bands → read_bands
 ```
 
@@ -173,4 +173,4 @@ band_max[k] = max λₖ(θ₁, θ₂)
 
 ## Remarks
 
-> **Generalisability:** Although the code is provided with the `Table_Rule` and `Chair_Rule` substitutions (stored in `Table_Rule.npy` and `Chair_Rule.npy`), it is not limited to these two examples. For any two-dimensional block substitution of degree `SUB_DEG`, the code can be used directly to compute sampled spectral approximations of the associated Schrödinger operator. It suffices to load a new substitution rule by setting `RULE_NAME` accordingly, and to choose appropriate values for `val`.
+> **Generalisability:** Although the code is provided with the `Table_Rule` and `Chair_Rule` substitutions (stored in `Table_Rule.npy` and `Chair_Rule.npy`), it is not limited to these two examples. For any two-dimensional block substitution of degree `SUB_DEG`, the code can be used directly to compute sampled spectral approximations of the associated Schrödinger operator. Provided the corresponding `.npy` file exists, it suffices to set `RULE_NAME` accordingly and to choose appropriate values for `val`.
