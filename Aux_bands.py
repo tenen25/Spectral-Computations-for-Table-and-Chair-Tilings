@@ -18,25 +18,25 @@ def get_ordinal_suffix(num: int) -> str:
     if last_digit == 3: return "rd"
     return "th"
 
-def _band_filename(itera, eig_num, val_temp):
+def _band_filename(itera, val_temp):
     """Construct the canonical filename for a saved band computation."""
     rounded = [round(v, 4) for v in val_temp]
-    return f"Finished computations/{itera}{get_ordinal_suffix(itera)}, {eig_num} comput for values {rounded}.npy"
+    return f"Finished computations/{itera}{get_ordinal_suffix(itera)}, comput for values {rounded}.npy"
 
-def save_bands(itera, res, eig_num, patch, val_temp):
+def save_bands(itera, res, patch, val_temp):
     """
     Compute and save band data for the given parameters.
     Saves a file .npy binary file with the full array
     """
     save_arr = sample_band_edges(res, patch, val_temp)
-    base_path = _band_filename(itera, eig_num, val_temp)  # includes .npy extension
+    base_path = _band_filename(itera, val_temp)  # includes .npy extension
 
     # Save binary
     np.save(base_path, save_arr)
 
-def read_bands(itera, eig_num, val_temp):
+def read_bands(itera, val_temp):
     """Load and return saved band data for the given parameters."""
-    path = _band_filename(itera, eig_num, val_temp)
+    path = _band_filename(itera, val_temp)
     if not os.path.exists(path):
         raise FileNotFoundError(f"Band file not found: {path}")
     return np.load(path)
@@ -131,7 +131,7 @@ def print_several_bands(
         y = it
         size = init_size * (4 ** it)
 
-        mat = read_bands(it, 0, val_temp)
+        mat = read_bands(it, val_temp)
 
         for i in range(size):
             left = min(mat[1][i], mat[0][i])
