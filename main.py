@@ -29,23 +29,23 @@ start_tile_ileg = [[0, 0], [0, 0]]  # illegal config
 start_tile      = start_tile_ileg    # select starting patch here
 
 # --- Computation parameters ---
-itera       = 4     #number of substitution steps
+max_itera   = 4     #number of iteration steps
 res         = 9     #sampling resolution in the Floquet torus
 init_itera  = 0     #which iterations to plot range start
 fin_itera   = 4     #which iterations to plot range end
 
 init_size = len(start_tile) * len(start_tile[0])
-wid  = init_size * SUB_DEG  ** itera
+wid  = init_size * SUB_DEG  ** max_itera
 size = wid ** 2
 
 
 # --- Run ---
 if __name__ == "__main__":
-    patch = iterate_sub(itera, SUB_DEG, start_tile, tile_rule)
+    patch = iterate_sub(max_itera, SUB_DEG, start_tile, tile_rule)
        
     # Workflow options — uncomment as needed:
     """ Next line generates and saves spectrum of itera-th iteration """
-    for it in range(0, itera+1):
+    for it in range(0, max_itera+1):
         if it in range(0,5):
             resol=res
         else:
