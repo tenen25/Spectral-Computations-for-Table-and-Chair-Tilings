@@ -75,7 +75,7 @@ The following parameters are set directly in `main.py` before running:
 | `RULE_NAME` | `str` | Name of the substitution rule to load (either `"Table_Rule"` or `"Chair_Rule"`) |
 | `SUB_DEG` | `int` | Substitution degree — typically `2`, each tile expands into a `SUB_DEG × SUB_DEG` block |
 | `start_tile` | `list[list[int]]` | 2D seed tile for the first substitution iteration |
-| `max_itera` | `int` | Number of substitution steps |
+| `max_itera` | `int` | Number of iteration steps |
 | `res` | `int` | Phase resolution — controls density of Bloch phase sampling (`q ≤ res`) |
 | `val` | `list[float]` | On-site potential values assigned to each tile symbol |
 | `init_itera` | `int` | Plot range start — `0` includes the seed iteration |
@@ -85,13 +85,13 @@ The following parameters are set directly in `main.py` before running:
 
 ```python
 RULE_NAME  = "Chair_Rule"
-SUB_DEG    = 2
-start_tile = [[1,2,3], [0,1,2]]  # a 2x3 seed patch
-max_itera  = 4                   # produces a 32×48 patch
-res        = 9                   # samples phases with denominator up to 9
-val        = [0.0, 9.0, 18.0, 27.0]
-init_itera = 0
-fin_itera  = 4
+SUB_DEG    = 2                          # each tile expands into a 2×2 block
+start_tile = [[1,2,3], [0,1,2]]         # a 2×3 seed patch
+max_itera  = 4                          # compute for `0 ≤ it ≤ max_itera`
+res        = 9                          # samples phases with denominator up to 9
+val        = [0.0, 9.0, 18.0, 27.0]     # one potential per tile symbol
+init_itera = 0                          # plot from the seed iteration
+fin_itera  = 4                          # plot up to and including max_itera
 ```
 
 > **Note:** The length of `val` must match the number of distinct tile symbols in the substitution rule.
@@ -150,13 +150,13 @@ For a 4×4 patch, the enumeration is as follows:
 ```
 
 ### Phase Sampling
-Bloch phases are sampled over all rational points of the form:
+Bloch phase pairs `(θ₁, θ₂)` are sampled, where each component independently
+takes values of the form:
 
-```
-θ = π · a/q,   where gcd(a, q) = 1,   q ≤ res
-```
+    θ = π · a/q,   where gcd(a, q) = 1,   q ≤ res
 
-Duplicates are removed automatically using Python's `fractions.Fraction` and `set`.
+Duplicates are removed from each component set automatically using Python's
+`fractions.Fraction` and `set`.
 
 ### Sampled Bands
 For each eigenvalue branch `k`, the code records the sampled min and max over all phase pairs `(θ₁, θ₂)`:
