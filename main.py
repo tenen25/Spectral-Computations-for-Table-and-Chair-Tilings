@@ -35,8 +35,6 @@ init_itera  = 0     #which iterations to plot range start
 fin_itera   = 4     #which iterations to plot range end
 
 init_size = len(start_tile) * len(start_tile[0])
-wid  = init_size * SUB_DEG  ** max_itera
-size = wid ** 2
 
 
 # --- Run ---
