@@ -41,7 +41,6 @@ size = wid ** 2
 
 # --- Run ---
 if __name__ == "__main__":
-    patch = iterate_sub(max_itera, SUB_DEG, start_tile, tile_rule)
        
     # Workflow options — uncomment as needed:
     """ Next line generates and saves spectrum of itera-th iteration """
