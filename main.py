@@ -29,7 +29,7 @@ start_tile_ileg = [[0, 0], [0, 0]]  # illegal config
 start_tile      = start_tile_ileg    # select starting patch here
 
 # --- Computation parameters ---
-max_itera   = 4     #number of iteration steps
+max_itera   = 4     #number of maximal substitution steps
 res         = 9     #sampling resolution in the Floquet torus
 init_itera  = 0     #which iterations to plot range start
 fin_itera   = 4     #which iterations to plot range end
