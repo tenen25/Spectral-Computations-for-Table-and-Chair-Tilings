@@ -73,13 +73,13 @@ The following parameters are set directly in `main.py` before running:
 | Parameter | Type | Description |
 |---|---|---|
 | `RULE_NAME` | `str` | Name of the substitution rule to load (either `"Table_Rule"` or `"Chair_Rule"`) |
-| `SUB_DEG` | `int` | Substitution degree — typically `2` |
+| `SUB_DEG` | `int` | Substitution degree — typically `2`, each tile expands into a `SUB_DEG × SUB_DEG` block |
 | `start_tile` | `list[list[int]]` | 2D seed tile for the first substitution iteration |
-| `itera` | `int` | Number of substitution steps |
+| `max_itera` | `int` | Number of substitution steps |
 | `res` | `int` | Phase resolution — controls density of Bloch phase sampling (`q ≤ res`) |
 | `val` | `list[float]` | On-site potential values assigned to each tile symbol |
 | `init_itera` | `int` | Plot range start — `0` includes the seed iteration |
-| `fin_itera` | `int` | Plot range end — inclusive, must be `≤ itera` |
+| `fin_itera` | `int` | Plot range end — inclusive, must be `≤ max_itera` |
 
 ### Example of inputs
 
@@ -87,7 +87,7 @@ The following parameters are set directly in `main.py` before running:
 RULE_NAME  = "Chair_Rule"
 SUB_DEG    = 2
 start_tile = [[1,2,3], [0,1,2]]  # a 2x3 seed patch
-itera      = 4                   # produces a 32×48 patch
+max_itera  = 4                   # produces a 32×48 patch
 res        = 9                   # samples phases with denominator up to 9
 val        = [0.0, 9.0, 18.0, 27.0]
 init_itera = 0
@@ -107,14 +107,14 @@ When `main.py` is executed, it runs the following steps:
    tile_rule = rule_defn_read(RULE_NAME)
    ```
 
-2. **Generate substituted patch** — produces a patch of size `(len(start_tile) × 2^itera) × (len(start_tile[0]) × 2^itera)` after `itera` iterations
+2. **Generate substituted patch** — for each `it` with `0 ≤ it ≤ max_itera`, produces a patch of size `(len(start_tile) × 2^it) × (len(start_tile[0]) × 2^it)`
    ```python
-   patch = iterate_sub(itera, SUB_DEG, start_tile, tile_rule)
+   patch = iterate_sub(it, SUB_DEG, start_tile, tile_rule)
    ```
 
-3. **Compute and save sampled bands**
+3. **Compute and save sampled bands** for each `it` with `0 ≤ it ≤ max_itera`
    ```python
-   save_bands(itera, res, patch, val)
+   save_bands(it, res, patch, val)
    ```
 
 4. **Plot the saved bands** over the iteration range `[init_itera, fin_itera]`
@@ -125,7 +125,7 @@ When `main.py` is executed, it runs the following steps:
 ### Core Call Chain
 
 ```
-main → save_bands → sample_band_edges → op_mat_no_phase → eigvalsh
+main → save_bands → sample_band_edges(res, patch, val_temp) → op_mat_no_phase → eigvalsh
 main → print_several_bands → read_bands
 ```
 
