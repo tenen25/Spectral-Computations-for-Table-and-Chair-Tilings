@@ -121,7 +121,6 @@ def print_several_bands(
 
     ax.set_xlabel('Spectrum')
     ax.set_ylabel('Iteration number n')
-    #ax.set_title(f"Periodic approximation spectra, iterations {{init_itera}}-{{fin_itera}}")
 
     horizontal_segments = []
     vertical_segments = []
