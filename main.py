@@ -40,7 +40,6 @@ init_size = len(start_tile) * len(start_tile[0])
 # --- Run ---
 if __name__ == "__main__":
        
-    # Workflow options — uncomment as needed:
     """ Next line generates and saves spectrum of itera-th iteration """
     for it in range(0, max_itera+1):
         if it in range(0,5):
