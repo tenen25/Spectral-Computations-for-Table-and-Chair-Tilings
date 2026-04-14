@@ -1,6 +1,6 @@
 # Spectral Computation Code
 
-> Computes sampled spectral bands of periodic approximants associated with substitution-generated patterns.
+> Computes sampled spectral bands of discrete Schrödinger operators of periodic approximants associated with substitution-generated patterns.
 
 ---
 
